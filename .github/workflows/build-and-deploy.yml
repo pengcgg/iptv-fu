@@ -2,7 +2,7 @@ name: Build and Deploy Jekyll Site
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -18,7 +18,7 @@ jobs:
         fetch-depth: 0
 
     - name: Set up Ruby
-      uses: ruby/setup-ruby@1561e46143a03a688479f7a8d6401d495035c875
+      uses: ruby/setup-ruby@220337899e0203d50d0e2d65055d7a092a0e02b0
       with:
         ruby-version: '3.2'
         bundler-cache: true
@@ -29,13 +29,13 @@ jobs:
     - name: Build Jekyll site
       run: bundle exec jekyll build
 
-    - name: Deploy to gh branch
+    - name: Deploy to gh-pages branch
       uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./_site
-        publish_branch: master
+        publish_branch: gh-pages
         force_orphan: true
         user_name: 'github-actions[bot]'
         user_email: '41898282+github-actions[bot]@users.noreply.github.com'
